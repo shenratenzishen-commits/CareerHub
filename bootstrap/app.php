@@ -4,10 +4,13 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
-$app = Application::configure(basePath: dirname(__DIR__))
+$basePath    = dirname(__DIR__);
+$storagePath = getenv('APP_STORAGE') ?: $basePath . '/storage';
+
+$app = Application::configure(basePath: $basePath)
     ->withRouting(
-        web: __DIR__.'/../routes/web.php',
-        commands: __DIR__.'/../routes/console.php',
+        web: __DIR__ . '/../routes/web.php',
+        commands: __DIR__ . '/../routes/console.php',
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
@@ -17,9 +20,6 @@ $app = Application::configure(basePath: dirname(__DIR__))
         //
     })->create();
 
-// Use /tmp for storage on Vercel (read-only filesystem)
-if (isset($_ENV['VERCEL']) || getenv('VERCEL')) {
-    $app->useStoragePath('/tmp/storage');
-}
+$app->useStoragePath($storagePath);
 
 return $app;

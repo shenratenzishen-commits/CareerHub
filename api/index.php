@@ -4,26 +4,31 @@ if (!defined('LARAVEL_START')) {
     define('LARAVEL_START', microtime(true));
 }
 
-// Set correct paths for Vercel serverless
-$_ENV['APP_BASE_PATH'] = dirname(__DIR__);
-
-// Fix storage path for Vercel (read-only filesystem)
-if (!isset($_ENV['APP_STORAGE_PATH'])) {
-    $_ENV['APP_STORAGE_PATH'] = '/tmp/storage';
-}
-
-// Create writable storage dirs in /tmp
+// Create all required storage directories in /tmp
+$storagePath = '/tmp/storage';
 $dirs = [
-    '/tmp/storage/framework/sessions',
-    '/tmp/storage/framework/views',
-    '/tmp/storage/framework/cache/data',
-    '/tmp/storage/logs',
-    '/tmp/storage/app',
+    $storagePath . '/app/public',
+    $storagePath . '/framework/cache/data',
+    $storagePath . '/framework/sessions',
+    $storagePath . '/framework/testing',
+    $storagePath . '/framework/views',
+    $storagePath . '/logs',
 ];
 foreach ($dirs as $dir) {
     if (!is_dir($dir)) {
-        mkdir($dir, 0775, true);
+        mkdir($dir, 0777, true);
     }
 }
+
+// Copy cached config/routes if they exist
+$bootstrapCache = dirname(__DIR__) . '/bootstrap/cache';
+$tmpCache       = $storagePath . '/bootstrap/cache';
+if (!is_dir($tmpCache)) {
+    mkdir($tmpCache, 0777, true);
+}
+
+// Point Laravel to /tmp storage
+$_SERVER['APP_STORAGE'] = $storagePath;
+putenv('APP_STORAGE=' . $storagePath);
 
 require __DIR__ . '/../public/index.php';
