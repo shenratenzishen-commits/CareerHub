@@ -138,7 +138,7 @@
                 <button class="ch-bookmark-btn {{ in_array($job['id'], session('saved_jobs', [])) ? 'saved' : '' }}"
                         data-job-id="{{ $job['id'] }}"
                         data-type="job"
-                        onclick="handleBookmark(this)"
+                            onclick="handleBookmark(event, this)"
                         title="Save Job">
                     <i class="{{ in_array($job['id'], session('saved_jobs', [])) ? 'fas' : 'far' }} fa-bookmark"></i>
                 </button>

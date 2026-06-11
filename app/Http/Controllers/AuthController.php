@@ -49,14 +49,9 @@ class AuthController extends Controller
             return back()->withErrors(['email' => 'Your account has been banned. Contact support.'])->withInput();
         }
 
-        // Check email verification for registered users (not static)
-        if (!($user['verified'] ?? false)) {
-            session(['pending_verify_email' => $user['email']]);
-            return redirect()->route('verify.notice')
-                ->with('warning', 'Please verify your email before logging in.');
-        }
-
+        // Email verification removed: allow immediate login for all users
         session(['user' => $user]);
+        // OTP verification has been removed — allow immediate login for all roles
 
         return match($user['role']) {
             'superadmin' => redirect()->route('superadmin.dashboard')->with('success', 'Welcome, Super Admin!'),
@@ -84,10 +79,7 @@ class AuthController extends Controller
         $allIds = array_column($allUsers, 'id');
         $newId  = count($allIds) ? max($allIds) + 1 : 10;
 
-        // Generate verification token
-        $token = Str::random(64);
-
-        // Save user as unverified
+        // Save user as verified (verification disabled)
         $users   = session('registered_users', []);
         $users[] = [
             'id'         => $newId,
@@ -96,30 +88,13 @@ class AuthController extends Controller
             'password'   => $request->password,
             'role'       => $request->role,
             'status'     => 'active',
-            'verified'   => false,
+            'verified'   => true,
             'created_at' => now()->format('M d, Y'),
         ];
         session(['registered_users' => $users]);
 
-        // Store verification token
-        $tokens   = session('verify_tokens', []);
-        $tokens[$token] = [
-            'email'      => $request->email,
-            'expires_at' => now()->addHours(24)->timestamp,
-        ];
-        session(['verify_tokens' => $tokens]);
-
-        // Store pending email for notice page
-        session(['pending_verify_email' => $request->email]);
-
-        // Build verification URL
-        $verifyUrl = route('verify.email', ['token' => $token]);
-
-        // Send verification email
-        $this->sendVerificationEmail($request->email, $request->name, $verifyUrl);
-
-        return redirect()->route('verify.notice')
-            ->with('success', 'Account created! Please check your email to verify your account.');
+        return redirect()->route('login')
+            ->with('success', 'Account created! You may now login.');
     }
 
     // ── Show Verify Notice ────────────────────────────────────

@@ -114,7 +114,7 @@
                 <button class="ch-bookmark-btn {{ in_array($intern['slug'], session('saved_internships', [])) ? 'saved' : '' }}"
                         data-slug="{{ $intern['slug'] }}"
                         data-type="internship"
-                        onclick="handleBookmark(this)"
+                            onclick="handleBookmark(event, this)"
                         title="Save">
                     <i class="{{ in_array($intern['slug'], session('saved_internships', [])) ? 'fas' : 'far' }} fa-bookmark"></i>
                 </button>

@@ -63,8 +63,9 @@
                                     </button>
                                 </form>
                             @endif
-                            <button class="bookmark-btn btn rounded-pill px-4 py-2 {{ in_array($job['id'], session('saved_jobs', [])) ? 'btn-warning bookmarked' : 'btn-outline-warning' }}"
-                                    data-job-id="{{ $job['id'] }}">
+                                <button class="bookmark-btn btn rounded-pill px-4 py-2 {{ in_array($job['id'], session('saved_jobs', [])) ? 'btn-warning bookmarked' : 'btn-outline-warning' }}"
+                                    data-job-id="{{ $job['id'] }}"
+                                    onclick="handleBookmark(event, this)">
                                 <i class="{{ in_array($job['id'], session('saved_jobs', [])) ? 'fas' : 'far' }} fa-bookmark me-2"></i>
                                 <span class="bm-label">{{ in_array($job['id'], session('saved_jobs', [])) ? 'Saved' : 'Save Job' }}</span>
                             </button>
@@ -215,8 +216,9 @@
                             </button>
                         </form>
                     @endif
-                    <button class="bookmark-btn btn rounded-pill py-2 {{ in_array($job['id'], session('saved_jobs', [])) ? 'btn-warning bookmarked' : 'btn-outline-warning' }}"
-                            data-job-id="{{ $job['id'] }}">
+                        <button class="bookmark-btn btn rounded-pill py-2 {{ in_array($job['id'], session('saved_jobs', [])) ? 'btn-warning bookmarked' : 'btn-outline-warning' }}"
+                            data-job-id="{{ $job['id'] }}"
+                            onclick="handleBookmark(event, this)">
                         <i class="{{ in_array($job['id'], session('saved_jobs', [])) ? 'fas' : 'far' }} fa-bookmark me-2"></i>
                         <span class="bm-label">{{ in_array($job['id'], session('saved_jobs', [])) ? 'Saved' : 'Save Job' }}</span>
                     </button>

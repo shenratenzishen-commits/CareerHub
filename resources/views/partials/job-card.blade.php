@@ -68,11 +68,11 @@
     </a>
 
     {{-- ===== BOOKMARK — floats above the link ===== --}}
-    <button class="ch-bookmark-btn {{ $isSaved ? 'saved' : '' }}"
+        <button class="ch-bookmark-btn {{ $isSaved ? 'saved' : '' }}"
             data-type="{{ $isInternship ? 'internship' : 'job' }}"
             data-slug="{{ $slug }}"
             data-job-id="{{ $jobId }}"
-            onclick="handleBookmark(this)"
+            onclick="handleBookmark(event, this)"
             title="{{ $isSaved ? 'Saved' : 'Save' }}">
         <i class="{{ $isSaved ? 'fas' : 'far' }} fa-bookmark"></i>
     </button>

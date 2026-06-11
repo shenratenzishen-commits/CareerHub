@@ -121,9 +121,10 @@
 const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
 // Unified bookmark handler for all cards
-function handleBookmark(btn) {
-    event.preventDefault();
-    event.stopPropagation();
+function handleBookmark(e, btn) {
+    e = e || window.event;
+    e.preventDefault();
+    e.stopPropagation();
     const type  = btn.dataset.type;
     const jobId = btn.dataset.jobId;
     const slug  = btn.dataset.slug;
@@ -151,9 +152,9 @@ function handleBookmark(btn) {
     });
 }
 
-// Legacy aliases
-function saveInternshipCard(btn) { handleBookmark(btn); }
-function saveInternship(btn)     { handleBookmark(btn); }
+// Legacy aliases (keep backward compatible signature)
+function saveInternshipCard(e, btn) { handleBookmark(e, btn); }
+function saveInternship(e, btn)     { handleBookmark(e, btn); }
 
 function showToast(msg, type) {
     const t = document.createElement('div');
